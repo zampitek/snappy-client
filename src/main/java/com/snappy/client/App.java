@@ -23,10 +23,10 @@ public class App {
         if (!Install.isInstalled()) {
             System.out.println("Snappy is not installed. Do you want to install it? [Y/n]");
             Scanner scanner = new Scanner(System.in);
-            String answer = scanner.nextLine();
+            String answer = scanner.nextLine().toLowerCase();
             scanner.close();
 
-            if (answer.equals("Y") || answer.equals("y")) {
+            if (answer.equals("") || answer.equals("y")) {
                 Install install = new Install();
                 install.install();
             } else {
