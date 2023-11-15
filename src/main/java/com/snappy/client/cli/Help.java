@@ -1,9 +1,18 @@
 package com.snappy.client.cli;
 
+/*
+ * This class is responsible for printing the help message.
+ */
 public class Help {
     
     Help() {}
 
+    /*
+     * This method is responsible for printing the help message.
+     * 
+     * Called by:
+     * - CommandLine.parse()
+     */
     public void print() {
         System.out.println("Usage: snappy [option] [<params>]\n");
 

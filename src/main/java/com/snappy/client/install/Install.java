@@ -170,9 +170,6 @@ public class Install {
      * 
      * Called by:
      * - install()
-     * 
-     * 
-     * (Yeah, I know it shouldn't stay here. I'll move it up when I'll have time)
      */
     private void makeConfigFile(String ip, int port) {
         Map<String, Object> data = new LinkedHashMap<String, Object>();
@@ -193,7 +190,7 @@ public class Install {
     }
 
 
-    
+
 
     /*
      * The following method is responsible for the creation of the config file.

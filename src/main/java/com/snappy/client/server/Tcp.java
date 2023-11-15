@@ -11,22 +11,45 @@ import java.util.Map;
 
 import com.snappy.client.ErrorManager;
 
+/*
+ * This class is responsible for the communication with the server.
+ * It can send the snapshot to the server (for now).
+ */
 public class Tcp {
     private final String host;
     private final int port;
     
+    /*
+     * This constructor is responsible for the creation of the Tcp object.
+     * 
+     * Called by:
+     * - Snapshot.sendSnapshot()
+     */
     public Tcp(String host, int port) {
         this.host = host;
         this.port = port;
     }
 
+    /*
+     * This method is responsible for the sending of the snapshot to the server.
+     * 
+     * Called by:
+     * - Snapshot.sendSnapshot()
+     */
     public void send(String snapshotPath) {
         System.out.println("Sending the snapshot...");
         sendSnapshot(snapshotPath);
     }
 
+    /*
+     * This method is responsible for the sending of the snapshot to the server.
+     * 
+     * Called by:
+     * - send()
+     */
     private void sendSnapshot(String snapshotPath) {
         try {
+            // The following methods are responsible for the creation of the socket and the sending of the snapshot.
             Socket socket = new Socket(host, port);
             List<String> folders = getFolderList(snapshotPath);
             ObjectOutputStream outputStream = new ObjectOutputStream(socket.getOutputStream());
@@ -41,6 +64,12 @@ public class Tcp {
         }
     }
 
+    /*
+     * This method is responsible for the creation of the list of folders to send to the server.
+     * 
+     * Called by:
+     * - sendSnapshot()
+     */
     private List<String> getFolderList(String path) {
         List<String> folders = new ArrayList<>();
         File directory = new File(path);
@@ -57,7 +86,13 @@ public class Tcp {
 
         return folders;
     }
-
+    
+    /*
+     * This method is responsible for the sending of the list of folders to the server.
+     * 
+     * Called by:
+     * - sendSnapshot()
+     */
     private void sendFolderList(List<String> folders, Socket socket, ObjectOutputStream outputStream) {
         try {
             Map<String, Object> data = new HashMap<String, Object>();
@@ -71,8 +106,15 @@ public class Tcp {
         }
     }
 
+    /*
+     * This method is responsible for the sending of the files to the server.
+     * 
+     * Called by:
+     * - sendSnapshot()
+     */
     private void sendFiles(List<File> files, ObjectOutputStream outputStream) {
         try {
+            // The following methods are responsible for the creation of the map of files to send to the server.
             Map<String, Object> content = new LinkedHashMap<String, Object>();
 
             for (File file : files) {
@@ -91,12 +133,20 @@ public class Tcp {
             ErrorManager.exitWithError("Something went wrong while sending the file. Report this error to the developer.", e);
         }
     }
-
+    
+    /*
+     * This method is responsible for the creation of the list of files to send to the server.
+     * 
+     * Called by:
+     * - sendSnapshot()
+     */
     private List<File> processFiles(String path) {
         List<File> fileList = new ArrayList<>();
         File directory = new File(path);
 
+        
         File[] files = directory.listFiles();
+        // If the directory is empty, the method returns an empty list.
         if (files != null) {
             for (File file : files) {
                 if (file.isDirectory()) {
@@ -111,6 +161,13 @@ public class Tcp {
     }
 
 
+    /*
+     * This enum is responsible for the type of connection.
+     * 
+     * Called by:
+     * - sendFolderList()
+     * - sendFiles()
+     */
     private enum ConnectionType {
         POST,
         FOLDER_LIST,

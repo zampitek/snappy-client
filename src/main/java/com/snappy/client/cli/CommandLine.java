@@ -5,18 +5,33 @@ import com.snappy.client.install.Install;
 
 import java.util.List;
 
+/*
+ * This class is responsible for parsing the command line arguments.
+ * It manages the commands for taking, listing and restoring snapshots.
+ * It also manages the help command and the uninstall command.
+ */
+
 public class CommandLine {
     private String[] args;
     
+    // This constructor is responsible for parsing the command line arguments.
     public CommandLine(String[] args) {
         this.args = args;
     }
 
+    /*
+     * This method is responsible for parsing the command line arguments.
+     * 
+     * Called by:
+     * - App.main()
+     */
     public void parse() {
+        // If no arguments are passed, the help command is executed.
         if (args.length == 0) {
             Help help = new Help();
             help.print();
         } else {
+            // If the debug flag is passed, the debug mode is enabled and the flag is removed from the arguments.
             for (String arg : args) {
                 if (arg.equals("--debug")) {
                     enableDebugMode();
@@ -27,6 +42,7 @@ public class CommandLine {
                 }
             }
 
+            // The first argument is parsed and the corresponding command is executed.
             Arg arg = getArg(args[0]);
             if (arg == null) {
                 System.out.println("Invalid option: " + args[0]);
@@ -57,6 +73,12 @@ public class CommandLine {
         }
     }
 
+    /*
+     * This method is responsible for parsing the first argument.
+     * 
+     * Called by:
+     * - parse()
+     */
     private Arg getArg(String arg) {
         switch (arg) {
             case "-t":
@@ -74,12 +96,24 @@ public class CommandLine {
         }
     }
 
+    /*
+     * This method is responsible for enabling the debug mode.
+     * 
+     * Called by:
+     * - parse()
+     */
     private void enableDebugMode() {
         App.DEBUG_MODE = true;
     }
 
 
-
+    /*
+     * This enum is responsible for storing the possible arguments.
+     * 
+     * Called by:
+     * - getArg()
+     * - parse()
+     */
     public enum Arg {
         TAKE_SNAPSHOT,
         LIST_SNAPSHOTS,
